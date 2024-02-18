@@ -1,0 +1,16 @@
+.map-container{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.map{
+    flex: 1;
+}
+
+.drw-btn{
+    width: 10rem;
+    margin: 10px 0px;
+}

@@ -1,0 +1,8 @@
+.manager-container{
+    margin: 20px 10px;
+}
+
+.form-input{
+    display: flex;
+    flex-direction: column;
+}
