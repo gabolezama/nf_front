@@ -18,7 +18,7 @@ export const Checkbox = ({options = [], onChange, disabled}) => {
                     name={`option-${option}`}
                     value={option}
                     disabled={disabled}
-                    checked={selectedOption == option}
+                    checked={option? selectedOption == option : true}
                     onChange={handleOptionChange}
                 />
                 <label className="form-check-label" htmlFor={`option-${option}`}>

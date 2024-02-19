@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import './ActivityMap.styles.css'
 import { GoogleMap, LoadScript, Marker, Polygon, DrawingManager } from '@react-google-maps/api';
+import { useSelector } from 'react-redux';
 
 const containerStyle = {
   width: '60vw',
-  height: '50vh'
+  height: '70vh'
 };
 
 const center = {
@@ -14,31 +15,30 @@ const center = {
 
 export const ActivityMap = () => {
   const [markers, setMarkers] = useState([]);
+  const [singleMarker, setSingleMarker] = useState({});
   const [polygonPaths, setPolygonPaths] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
 
+  const isArea = useSelector(state => state?.isArea.status);
+
   const handleMapClick = (event) => {
-    if (isDrawing) {
-      const newMarker = {
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng()
-      };
-
+    const newMarker = {
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng()
+    };
+    if (!isArea) {
+      setSingleMarker(newMarker);
+      console.log('single');
+    } else if (isArea && isDrawing) {
       setMarkers([...markers, newMarker]);
+      console.log('area');
     }
-  };
-
-  const handlePolygonComplete = () => {
-    setIsDrawing(false);
-    const paths = markers.map(marker => ({ lat: marker.lat, lng: marker.lng }));
-    setPolygonPaths(paths);
   };
 
   const toggleDrawing = () => {
     setIsDrawing(!isDrawing);
     setMarkers([]);
     setPolygonPaths([]);
-    isDrawing && handlePolygonComplete();
   };
 
   return (
@@ -53,22 +53,27 @@ export const ActivityMap = () => {
           zoom={10}
           onClick={handleMapClick}
         >
-          {markers.map((marker, index) => (
-            <Marker key={index} position={marker} />
-          ))}
-          {polygonPaths.length > 0 && (
-            <Polygon paths={polygonPaths} onPolygonComplete={handlePolygonComplete} />
+          {!isArea && (
+            <Marker position={singleMarker} />
           )}
-          <DrawingManager
-            drawingMode={isDrawing ? 'polygon' : null}
-          />
+          {isArea && polygonPaths.length > 0 && (
+            <Polygon paths={polygonPaths} />
+          )}
+          {isArea && (
+            <DrawingManager
+              drawingMode={isDrawing ? 'polygon' : 'marker'}
+            />
+          )}
         </GoogleMap>
       </LoadScript>
-      <button
+      {isArea && (
+        <button
           className={'btn btn-primary drw-btn'}
-          onClick={toggleDrawing}>
-            {isDrawing ? 'Detener dibujo' : 'Comenzar dibujo'}
-      </button>
+          onClick={toggleDrawing}
+        >
+          {isDrawing ? 'Detener dibujo' : 'Comenzar dibujo'}
+        </button>
+      )}
     </div>
   );
 };

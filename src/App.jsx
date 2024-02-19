@@ -1,23 +1,20 @@
 import React from 'react';
 import './App.css'
-import { ActivityMap } from './Components/ActivityMap/ActivityMap';
-import ActivityManager from './Components/ActivityManager/ActivityManager';
 import { Login } from './Screens/Login/Login';
+import CustomAlert from './Components/Alert/CustomAlert';
+import Activity from './Screens/Activity/Activity';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
 
 const App = () => {
-
   return (
-    <div className='app-container'>
-      <Login/>
-      { false &&
-        <>
-          <h3>Bienvenido a la gestión de Actividades</h3>
-          <div className='map-and-manager-container'>
-            <ActivityMap/>
-            <ActivityManager/>
-          </div>
-        </>
-      }
+    <div className='container'> 
+      <CustomAlert/>
+      <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login/>} />
+            <Route path="/activity" element={<Activity/>} />
+          </Routes>
+      </BrowserRouter>
     </div>
   );
 };

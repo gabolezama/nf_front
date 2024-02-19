@@ -1,0 +1,8 @@
+.app-container h3{
+    margin: 20px;
+}
+  
+.map-and-manager-container{
+display: flex;
+flex-direction: row ;
+}

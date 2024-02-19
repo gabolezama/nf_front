@@ -1,9 +1,14 @@
 import { combineReducers } from 'redux';
-import userReducer from './userReducer';
+import isAreaReducer from './CheckAreaReducers';
+import errorHandler from './ErrorHandlers';
+import userReducer from './UserReducers';
+import activityReducer from './ActivityReducers';
 
 const rootReducer = combineReducers({
-  user: userReducer
-  // Puedes agregar más reducers aquí si es necesario
+  activity: activityReducer,
+  user: userReducer,
+  isArea: isAreaReducer,
+  errorHandler: errorHandler,
 });
 
 export default rootReducer;

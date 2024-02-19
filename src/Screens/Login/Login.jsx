@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  window.history.replaceState(null, '', '/');
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -14,12 +18,16 @@ export const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Aquí puedes enviar los datos del formulario a tu backend para autenticación
     console.log('Email:', email);
     console.log('Password:', password);
-    // Aquí puedes agregar lógica adicional, como validación de datos, etc.
   };
 
+  const dispatch = useDispatch();
+  dispatch({ type: 'LOGIN', payload: null });
+  const handleLogin = () => {
+    const user = { email, password }; // Datos del usuario registrado
+    dispatch({ type: 'LOGIN', payload: user });
+  };
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -49,7 +57,7 @@ export const Login = () => {
                   />
                 </div>
                 <div className="text-center">
-                  <button type="submit" className="btn btn-primary">Login</button>
+                  <Link to={ email && password? '/activity': '/'}><button type="submit" className="btn btn-primary" onClick={handleLogin}>Login</button></Link>
                 </div>
               </form>
             </div>
