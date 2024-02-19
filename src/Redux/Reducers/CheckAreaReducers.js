@@ -3,7 +3,6 @@ const initialState = {
   };
   
   const isAreaReducer = (state = initialState, action) => {
-    console.log('REDUCER: ', action);
     switch (action.type) {
       case 'IS_AREA':
         return {

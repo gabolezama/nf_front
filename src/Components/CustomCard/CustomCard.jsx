@@ -2,20 +2,22 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { deleteActivity } from '../../api/routes';
 
 export const CustomCard = ({ activity: task }) => {
     const dispatch = useDispatch();
     const handleDeleteItem = () =>{
-        dispatch({type: 'DELETE_BY_ID', payload: task})
+        dispatch({type: 'DELETE_BY_ID', payload: task});
+        deleteActivity(task.task_id).then(console.log);
     }
     const handleUpdateItem = () =>{
-        dispatch({type: 'UPDATE_ITEM', payload: task})
+        dispatch({type: 'UPDATE_ITEM', payload: task});
     }
   return (
     <div className="card mb-3">
       <div className="card-body">
         <h5 className="card-title">{task?.name}</h5>
-        <p className="card-text">ID: {task?.id}</p>
+        <p className="card-text">ID: {task?.task_id}</p>
         <p className="card-text">{task?.description}</p>
         <p className="card-text">
           <small className="text-muted">Creado el: {task?.date}</small>

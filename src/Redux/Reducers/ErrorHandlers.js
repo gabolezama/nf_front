@@ -7,7 +7,6 @@ const initialState = {
 };
   
   const errorHandler = (state = initialState, action) => {
-    console.log('REDUCER: ', action);
     switch (action.type) {
       case 'SHOW_GLOBAL_ALERT':
         return {

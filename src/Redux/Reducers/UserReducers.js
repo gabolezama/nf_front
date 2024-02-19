@@ -1,19 +1,18 @@
 const initialState = {
-    user: null // El usuario por defecto es null (no registrado)
+    user: null
   };
   
   const userReducer = (state = initialState, action) => {
-    console.log('REDUCER: ', action);
     switch (action.type) {
       case 'LOGIN':
         return {
           ...state,
-          user: action.payload // Actualiza el estado del usuario con los datos del usuario registrado
+          user: action.payload
         };
       case 'LOGOUT':
         return {
           ...state,
-          user: null // Borra los datos del usuario al hacer logout
+          user: null
         };
       default:
         return state;

@@ -1,15 +1,16 @@
 const initialState = {
    list: [],
+   isEditing: false,
    editItem: {}
 };
   
   const activityReducer = (state = initialState, action) => {
-    console.log('REDUCER: ', action);
     switch (action.type) {
       case 'ADD_LIST':
         return {
           ...state,
           list: [...state.list, action.payload],
+          isEditing: false,
           editItem: {
             name:'',
             description: ''
@@ -19,6 +20,7 @@ const initialState = {
         return {
           ...state,
           list: state.list.filter( item => item.id !== action.payload.id),
+          isEditing: true,
           editItem: action.payload
         };
       case 'DELETE_BY_ID':

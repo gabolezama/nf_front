@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useDispatch, useSelector} from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
+import { createActivity, updateActivity } from "../../../api/routes";
 
 export const useActivityHook = () => {
-    const {editItem} = useSelector(state => state.activity)
+    const {editItem, isEditing} = useSelector(state => state.activity)
     const[activityBtn, setActivityBtn] = useState(true);
     const[newActivity, setNewActivity] = useState({});
     const dispatch = useDispatch();
@@ -12,7 +13,7 @@ export const useActivityHook = () => {
         activityBtn && setActivityBtn(false);
         !activityBtn && saveActivity();
     }
-    const saveActivity = () =>{
+    const saveActivity = async () =>{
         if(Object.values(newActivity).length !== 4){
             dispatch({type:'SHOW_GLOBAL_ALERT', payload: {
                 show: true,
@@ -22,12 +23,14 @@ export const useActivityHook = () => {
             return
         }
         const date = new Date();
-        
-        dispatch({type:'ADD_LIST', payload: {
-            id: uuidv4(),
+        const objToSave = {
+            task_id: isEditing? editItem.task_id : uuidv4(),
             date: `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
             ...newActivity
-        }});
+        }
+        isEditing? await updateActivity(objToSave) : await createActivity(objToSave);
+        dispatch({type:'ADD_LIST', payload: objToSave});
+
         setActivityBtn(true);
         setNewActivity({
             name: '',
