@@ -10,12 +10,13 @@ function ActivityManager() {
         handleActivityButon,
         handleNewActivity,
         activityBtn,
-        newActivity
+        newActivity,
+        isArea
     } = useActivityHook();
 
     return (
         <div className='container-fluid manager-container'>
-            <button className='btn btn-success' onClick={handleActivityButon}>{ activityBtn? 'Crear nueva actividad': 'Guardar'}</button>
+            <button className='btn btn-success' onClick={handleActivityButon}>{ activityBtn? 'Crear nueva actividad': 'Guardar Formulario'}</button>
             <div className='form-input'>
                 <label>Nombre de la actividad:</label>
                 <input id='name' value={newActivity.name || editItem.name} onInput={handleNewActivity} placeholder='ej: medicion de carbono' disabled={activityBtn}/>
@@ -32,6 +33,9 @@ function ActivityManager() {
                 <label>Es sobre un área?</label>
                 <Checkbox onChange={handleNewActivity} options={[[3,'SI'], [4,'NO']]} disabled={activityBtn}/>
             </div>
+            {   !activityBtn &&
+                <p>Haga click en GUARDAR para colocar el {isArea? 'poligono': 'marcador'}</p>
+            }
         </div>
     )
 }

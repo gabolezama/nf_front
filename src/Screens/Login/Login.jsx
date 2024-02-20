@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -18,14 +18,12 @@ export const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
   };
 
   const dispatch = useDispatch();
   dispatch({ type: 'LOGIN', payload: null });
   const handleLogin = () => {
-    const user = { email, password }; // Datos del usuario registrado
+    const user = { email, password };
     dispatch({ type: 'LOGIN', payload: user });
   };
   return (

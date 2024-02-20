@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector} from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { createActivity, updateActivity } from "../../../api/routes";
 
 export const useActivityHook = () => {
     const {editItem, isEditing} = useSelector(state => state.activity)
     const[activityBtn, setActivityBtn] = useState(true);
     const[newActivity, setNewActivity] = useState({});
+    const[isArea, setIsArea] = useState(null);
     const dispatch = useDispatch();
     let newActivityConfig = editItem || {};
     const handleActivityButon = () =>{
@@ -22,14 +22,15 @@ export const useActivityHook = () => {
             }});
             return
         }
+        dispatch({type: 'IS_AREA', payload: newActivity.isArea})
         const date = new Date();
         const objToSave = {
             task_id: isEditing? editItem.task_id : uuidv4(),
             date: `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
             ...newActivity
         }
-        isEditing? await updateActivity(objToSave) : await createActivity(objToSave);
-        dispatch({type:'ADD_LIST', payload: objToSave});
+        
+        dispatch({type:'SET_FORM_DATA', payload: objToSave});
 
         setActivityBtn(true);
         setNewActivity({
@@ -42,7 +43,8 @@ export const useActivityHook = () => {
         if(evt.target.id.includes('option')){
             if(evt.target.id.includes('3') || evt.target.id.includes('4')){
                 key = 'isArea';
-                value = evt.target.id.includes('3')
+                value = evt.target.id.includes('3');
+                setIsArea(value);
             }else{
                 key = 'isRecursive';
                 value = evt.target.id.includes('1');
@@ -62,6 +64,7 @@ export const useActivityHook = () => {
         handleActivityButon,
         handleNewActivity,
         activityBtn,
-        newActivity
+        newActivity,
+        isArea
     }
 }
