@@ -1,36 +1,68 @@
 import { useState } from "react";
 import { useDispatch, useSelector} from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
+import { createActivity, updateActivity } from "../../../api/routes";
 
 export const useActivityHook = () => {
     const {editItem, isEditing} = useSelector(state => state.activity)
-    const[activityBtn, setActivityBtn] = useState(true);
-    const[newActivity, setNewActivity] = useState({});
-    const[isArea, setIsArea] = useState(null);
+    const [activityBtn, setActivityBtn] = useState(true);
+    const [newActivity, setNewActivity] = useState({});
+    const [isArea, setIsArea] = useState(null);
+    const [singleMarker, setSingleMarker] = useState({});
+    const [polygonPaths, setPolygonPaths] = useState([]);
+    const [isDrawing, setIsDrawing] = useState(false);
+
+    const handlePolygonComplete = polygon => {
+        const polygonPath = polygon.getPath().getArray().map(latLng => ({
+          lat: latLng.lat(),
+          lng: latLng.lng()
+        }));
+        setPolygonPaths(polygonPath);
+      };
+
+    const handleMapClick = (event) => {
+        const newMarker = {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
+        };
+        setSingleMarker(newMarker)
+    };
+  
+    const toggleDrawing = () => {
+      setIsDrawing(!isDrawing);
+      setPolygonPaths([]);
+    };
     const dispatch = useDispatch();
     let newActivityConfig = editItem || {};
+
+
     const handleActivityButon = () =>{
         activityBtn && setActivityBtn(false);
-        !activityBtn && saveActivity();
-    }
-    const saveActivity = async () =>{
-        if(Object.values(newActivity).length !== 4){
+        const required = ['name', 'description','isArea', 'isRecursive'];
+        const keys = Object.keys(newActivity);
+        const condition = required.every(propiedad => keys.includes(propiedad))
+
+        if(condition){ 
+            saveActivity();
+        }else if(!activityBtn){
             dispatch({type:'SHOW_GLOBAL_ALERT', payload: {
-                show: true,
-                message: 'No se ha completado los campos del formulario',
-                type: 'danger'
+                 show: true,
+                 message: 'No ha completado todos los datos de la actividad',
+                 type: 'danger'
             }});
-            return
         }
-        dispatch({type: 'IS_AREA', payload: newActivity.isArea})
+    }
+
+    const saveActivity = () =>{
         const date = new Date();
         const objToSave = {
             task_id: isEditing? editItem.task_id : uuidv4(),
             date: `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-            ...newActivity
+            ...newActivity,
         }
-        
-        dispatch({type:'SET_FORM_DATA', payload: objToSave});
+
+        dispatch({type: 'ADD_LIST', payload: objToSave})
+        isEditing?  updateActivity(objToSave).then() : createActivity(objToSave).then();
 
         setActivityBtn(true);
         setNewActivity({
@@ -55,8 +87,9 @@ export const useActivityHook = () => {
         }
         newActivityConfig={
             ...newActivity,
-            [key]: value 
+            [key]: value
         }
+        console.log('SET NEW:', newActivity);
         setNewActivity(newActivityConfig);
     }
 
@@ -65,6 +98,12 @@ export const useActivityHook = () => {
         handleNewActivity,
         activityBtn,
         newActivity,
-        isArea
+        handleMapClick, 
+        toggleDrawing, 
+        isArea,
+        singleMarker,
+        polygonPaths,
+        handlePolygonComplete,
+        isDrawing
     }
 }

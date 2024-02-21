@@ -3,6 +3,18 @@
 }
   
 .map-and-manager-container{
-display: flex;
-flex-direction: row ;
+    display: flex;
+    flex-direction: row ;
+}
+
+.title{
+    display: flex;
+    flex-direction: row ;
+}
+
+.button{
+    width: 10rem;
+    height: 3rem;
+    margin: 10px 5px;
+    padding: 1px;
 }

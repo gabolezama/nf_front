@@ -1,15 +1,13 @@
 export const createActivity = async (body) =>{
     const is_area = body.isArea;
     const is_recursive = body.isRecursive;
-    const single_marker = body.singleMarker;
     delete body.isArea;
     delete body.isRecursive;
     delete body.singleMarker;
     const bodyFormatted = {
         ...body,
         is_area,
-        is_recursive,
-        single_marker
+        is_recursive
     }
     const req = await fetch('http://localhost:4000/api/v1/activities/create',{
         method: 'POST',
@@ -23,15 +21,13 @@ export const createActivity = async (body) =>{
 export const updateActivity = async (body) =>{
     const is_area = body.isArea;
     const is_recursive = body.isRecursive;
-    const single_marker = body.singleMarker;
     delete body.isArea;
     delete body.isRecursive;
     delete body.singleMarker;
     const bodyFormatted = {
         ...body,
         is_area,
-        is_recursive,
-        single_marker
+        is_recursive
     }
     const req = await fetch(`http://localhost:4000/api/v1/activities/update`,{
         method: 'PUT',

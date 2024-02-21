@@ -16,7 +16,7 @@ export const Checkbox = ({options = [], onChange, disabled}) => {
                     type="radio"
                     id={`option-${option}`}
                     name={`option-${option}`}
-                    value={option}
+                    value={ option}
                     disabled={disabled}
                     checked={option? selectedOption == option : true}
                     onChange={handleOptionChange}
